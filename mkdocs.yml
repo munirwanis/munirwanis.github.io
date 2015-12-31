@@ -1,0 +1,14 @@
+site_name: MkDocs-Test
+pages:
+- Home: 'index.md'
+- Markdown:
+    - 'Getting Started': 'markdown/getting-started.md'
+    - 'Results':
+        - 'Headers': 'markdown/results/headers.md'
+- About: 'about.md'
+theme: readthedocs
+markdown_extensions:
+    - smarty
+    - toc:
+        permalink: True
+    - sane_lists
