@@ -1,12 +1,12 @@
 angular.module('notesApp', [])
     .controller('NotesListController', function($scope) {
         $scope.nomeAluno = '';
-        $scope.nota1Aluno = 0;
-        $scope.nota2Aluno = 0;
-        $scope.nota3Aluno = 0;
-        $scope.nota4Aluno = 0;
-        $scope.media = ($scope.nota1Aluno + $scope.nota2Aluno + $scope.nota3Aluno + $scope.nota4Aluno) / 4;
-        $scope.conceito = $scope.media >= 7 ? 'Aprovado' : 'Reprovado';
+        $scope.nota1Aluno = '';
+        $scope.nota2Aluno = '';
+        $scope.nota3Aluno = '';
+        $scope.nota4Aluno = '';
+        $scope.media = '';
+        $scope.conceito = '';
         $scope.addNoteWithScope = function() {
             noteList.notes.push({
                 aluno: $scope.nomeAluno,
@@ -16,16 +16,16 @@ angular.module('notesApp', [])
                 nota4: $scope.nota4Aluno
             });
             $scope.nomeAluno = '';
-            $scope.nota1Aluno = 0;
-            $scope.nota2Aluno = 0;
-            $scope.nota3Aluno = 0;
-            $scope.nota4Aluno = 0;
-            $scope.media = 0.0;
+            $scope.nota1Aluno = '';
+            $scope.nota2Aluno = '';
+            $scope.nota3Aluno = '';
+            $scope.nota4Aluno = '';
+            $scope.media = '';
             $scope.conceito = '';
         };
         $scope.calculateNotesWithScope = function() {
             $scope.media = ($scope.nota1Aluno + $scope.nota2Aluno + $scope.nota3Aluno + $scope.nota4Aluno) / 4;
-            $scope.conceito = $scope.media >= 7 ? 'Aprovado' : 'Reprovado';
+            $scope.conceito = $scope.media >= 7 ? 'Aprovado' : $scope.media > 0 ? 'Reprovado' : '';
         };
         var noteList = this;
         noteList.notes = [{
