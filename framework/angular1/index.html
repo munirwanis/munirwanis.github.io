@@ -69,7 +69,43 @@
                 <input class="btn btn-primary" type="submit" value="Add">
             </div>
         </form>
-        
+
+        <h2>Adiciona aluno com $scope</h2>
+        <table class="table table-hover">
+            <tr>
+                <th>Aluno</th>
+                <th>Nota 1</th>
+                <th>Nota 2</th>
+                <th>Nota 3</th>
+                <th>Nota 4</th>
+                <th>Média</th>
+                <th>Conceito</th>
+            </tr>
+            <tr>
+                <td>{{nomeAluno}}</td>
+                <td>{{nota1Aluno}}</td>
+                <td>{{nota2Aluno}}</td>
+                <td>{{nota3Aluno}}</td>
+                <td>{{nota4Aluno}}</td>
+                <td>{{media | number:2}}</td>
+                <td>{{conceito}}</td>
+            </tr>
+        </table>
+        <form ng-submit="addNoteWithScope()">
+            <div class="form-group">
+                <input class="form-control" type="text" ng-model="nomeAluno" size="30" placeholder="Nome do aluno">
+                <br/>
+                <input ng-blur="calculateNotesWithScope();" class="form-control" type="number" min="0" max="10" step="0.1" ng-model="nota1Aluno" size="30" placeholder="Nota 1">
+                <br/>
+                <input ng-blur="calculateNotesWithScope();" class="form-control" type="number" min="0" max="10" step="0.1" ng-model="nota2Aluno" size="30" placeholder="Nota 2">
+                <br/>
+                <input ng-blur="calculateNotesWithScope();" class="form-control" type="number" min="0" max="10" step="0.1" ng-model="nota3Aluno" size="30" placeholder="Nota 3">
+                <br/>
+                <input ng-blur="calculateNotesWithScope();" class="form-control" type="number" min="0" max="10" step="0.1" ng-model="nota4Aluno" size="30" placeholder="Nota 4">
+                <br/>
+                <input class="btn btn-primary" type="submit" value="Add">
+            </div>
+        </form>
         <!-- Modal -->
         <div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">

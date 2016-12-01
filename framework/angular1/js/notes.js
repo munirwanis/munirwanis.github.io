@@ -1,5 +1,32 @@
 angular.module('notesApp', [])
-    .controller('NotesListController', function() {
+    .controller('NotesListController', function($scope) {
+        $scope.nomeAluno = '';
+        $scope.nota1Aluno = 0;
+        $scope.nota2Aluno = 0;
+        $scope.nota3Aluno = 0;
+        $scope.nota4Aluno = 0;
+        $scope.media = ($scope.nota1Aluno + $scope.nota2Aluno + $scope.nota3Aluno + $scope.nota4Aluno) / 4;
+        $scope.conceito = $scope.media >= 7 ? 'Aprovado' : 'Reprovado';
+        $scope.addNoteWithScope = function() {
+            noteList.notes.push({
+                aluno: $scope.nomeAluno,
+                nota1: $scope.nota1Aluno,
+                nota2: $scope.nota2Aluno,
+                nota3: $scope.nota3Aluno,
+                nota4: $scope.nota4Aluno
+            });
+            $scope.nomeAluno = '';
+            $scope.nota1Aluno = 0;
+            $scope.nota2Aluno = 0;
+            $scope.nota3Aluno = 0;
+            $scope.nota4Aluno = 0;
+            $scope.media = 0.0;
+            $scope.conceito = '';
+        };
+        $scope.calculateNotesWithScope = function() {
+            $scope.media = ($scope.nota1Aluno + $scope.nota2Aluno + $scope.nota3Aluno + $scope.nota4Aluno) / 4;
+            $scope.conceito = $scope.media >= 7 ? 'Aprovado' : 'Reprovado';
+        };
         var noteList = this;
         noteList.notes = [{
             aluno: 'João',
@@ -47,15 +74,11 @@ angular.module('notesApp', [])
         };
         noteList.result = {}
         noteList.calculateNotes = function(notesObj) {
-            console.log(notesObj);
             media = (notesObj.nota1 + notesObj.nota2 + notesObj.nota3 + notesObj.nota4) / 4;
-            noteList.result = { 
+            noteList.result = {
                 aluno: notesObj.aluno,
                 media: media,
                 conceito: media >= 7 ? 'Aprovado' : 'Reprovado'
             }
-            console.log(media);
-            console.log(noteList.result);
-            console.log(noteList);
         };
     });
