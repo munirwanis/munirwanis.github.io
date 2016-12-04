@@ -1,0 +1,25 @@
+<div class="container-fluid" ng-controller="StationsController as stationsCtrl" align="center">
+    <div class="btn-group-vertical" role="group">
+        <button ng-repeat="stations in stationsCtrl.stationsList" type="button" data-toggle="modal" data-target="#myModal" class="btn btn-default" ng-click="stationsCtrl.getStationOnMap(stations)">Estação {{stations.ESTACAO}}</button>
+    </div>
+    <br/><br/>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Estação {{stationsCtrl.stationOnMap.station}}</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0" ng-src="{{stationsCtrl.stationOnMap.mapUrl}}"></iframe>
+                    <br />
+                    <small><a ng-href="{{stationsCtrl.stationOnMap.mapUrl}}" style="color:#0000FF;text-align:left" target="_blank">Visualizar em tamanho maior</a></small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
