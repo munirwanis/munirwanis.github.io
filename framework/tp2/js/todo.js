@@ -12,7 +12,6 @@ angular.module('todoApp', ['ngSanitize']) //todoApp
         todoList.err = '';
         todoList.addTodo = function() {
             verifyTodos(function(err, success) {
-                console.log(err);
                 if (err != null) {
                     todoList.err = err;
                     $("#todoModal").modal();
