@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="todoApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.css">
+    <title>TP2</title>
+</head>
+
+<body>
+    <div class="container" ng-controller="TodoListController as todoList">
+        <h2>Todo</h2>
+        <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span> [ <a href="" ng-click="todoList.archive()">archive</a>        ]
+        <ul class="unstyled">
+            <li ng-repeat="todo in todoList.todos">
+                <input type="checkbox" ng-model="todo.done" ng-change="todoList.scratchText(todo)">
+                <span ng-bind-html="todo.text"></span>
+            </li>
+        </ul>
+        <form ng-submit="todoList.addTodo()">
+            <input class="form-control" type="text" ng-model="todoList.todoText" size="30" placeholder="Add new todo here">
+            <br/>
+            <input class="btn btn-primary" type="submit" value="Add">
+        </form>
+        <!-- Modal -->
+        <div class="modal fade" id="todoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Erro!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><b>{{todoList.err}}</p>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-sanitize.min.js"></script>
+    <script src="js/todo.js"></script>
+</body>
+
+</html>
