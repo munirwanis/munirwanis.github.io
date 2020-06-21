@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content"><channel><title>Munir Xavier Wanis</title><description>A description of MunirWanisWebsite</description><link>https://munirwanis.github.io</link><language>en</language><lastBuildDate>Sat, 20 Jun 2020 21:12:10 -0300</lastBuildDate><pubDate>Sat, 20 Jun 2020 21:12:10 -0300</pubDate><ttl>250</ttl><atom:link href="https://munirwanis.github.io/feed.rss" rel="self" type="application/rss+xml"/><item><guid isPermaLink="true">https://munirwanis.github.io/blog/2020/swiftui-statusbar-color</guid><title>SwiftUI status bar background color bug</title><description>SwiftUI and status bar background color</description><link>https://munirwanis.github.io/blog/2020/swiftui-statusbar-color</link><pubDate>Sat, 20 Jun 2020 11:30:00 -0300</pubDate><content:encoded><![CDATA[<h1>SwiftUI status bar background color bug</h1><p>Recently when I released <a href="https://apps.apple.com/br/app/live-tracker/id1514023371?l=en">Live Tracker</a> app people started to report a bug about the status bar being all white.</p><figure>
+    <picture>
+        <img src="https://munirwanis.github.io/images/blog/2020/statusbar-bug.jpeg" alt="Device bug example">
+    </picture>
+    <figcaption>Live Tracker status bar bug on iOS 13.2.3</figcaption>
+</figure><p>The expected behaviour should be a red background color like the <code>NavigationView</code>, on iOS 13.5 it looked just fine but on previous versions it was acting buggy like that. So, to get it working as expected I had to use a <code>ZStack</code> to put a <code>Color</code> view ignoring the top safe area, the code is simple and will look like this:</p><pre><code><span class="splashkeyword">struct</span> ContentView: <span class="splashtype">View</span> {
+    <span class="splashkeyword">var</span> body: <span class="splashkeyword">some</span> <span class="splashtype">View</span> {
+        <span class="splashtype">ZStack</span> {
+            <span class="splashtype">Color</span>.<span class="splashproperty">red</span>.<span class="splashcall">edgesIgnoringSafeArea</span>(.<span class="splashdotAccess">top</span>)
+
+            <span class="splashtype">NavigationView</span> {
+                <span class="splashtype">Text</span>(<span class="splashstring">"Hello World!"</span>)
+            }
+        }
+    }
+}
+</code></pre><p>That's it! Now it should be showing the desired color on your status bar. It looks kinda hacky and although Apple fixed it on newer versions it's still necessary to use it on older versions.</p>]]></content:encoded></item><item><guid isPermaLink="true">https://munirwanis.github.io/blog/2020/first-post</guid><title>Hello World!</title><description>Marking my first post</description><link>https://munirwanis.github.io/blog/2020/first-post</link><pubDate>Sat, 20 Jun 2020 09:30:00 -0300</pubDate><content:encoded><![CDATA[<h1>Hello World!</h1><p>I'm trying out <a href="https://github.com/JohnSundell/Publish">Publish</a> by John Sundell and thought it would be cool to have a static website to write about my adventures with coding things.</p><p>Maybe some of the solutions I find along the way will help others too. So why not sharing them? 😊</p>]]></content:encoded></item></channel></rss>
