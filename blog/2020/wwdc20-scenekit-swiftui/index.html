@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content"><channel><title>Munir Xavier Wanis</title><description>Here you will find posts about the things I think are worth sharing.</description><link>https://munirwanis.github.io</link><language>en</language><lastBuildDate>Fri, 26 Jun 2020 00:46:37 -0300</lastBuildDate><pubDate>Fri, 26 Jun 2020 00:46:37 -0300</pubDate><ttl>250</ttl><atom:link href="https://munirwanis.github.io/feed.rss" rel="self" type="application/rss+xml"/><item><guid isPermaLink="true">https://munirwanis.github.io/blog/2020/wwdc20-scenekit-swiftui</guid><title>Using SceneKit with SwiftUI to build interactions between them</title><description>Using SceneKit with SwiftUI to implement interesting interaction between both APIs.</description><link>https://munirwanis.github.io/blog/2020/wwdc20-scenekit-swiftui</link><pubDate>Fri, 26 Jun 2020 01:00:00 -0300</pubDate><content:encoded><![CDATA[<h1>Using SceneKit with SwiftUI to build interactions between them</h1><p>WWDC20 is blowing our minds this week with a lot of great new things and I'm particularly stuned with this new feature in SwiftUI: <code>SpriteView</code>. Now you can embed SpriteKit views in SwiftUI in a very simple way, you take your <code>SKScene</code> and pass it as an argument on <code>SpriteView</code> just like that:</p><pre><code><span class="splashkeyword">import</span> SwiftUI
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="og:site_name" content="Munir Xavier Wanis"/><link rel="canonical" href="https://munirwanis.github.io/blog/2020/wwdc20-scenekit-swiftui"/><meta name="twitter:url" content="https://munirwanis.github.io/blog/2020/wwdc20-scenekit-swiftui"/><meta name="og:url" content="https://munirwanis.github.io/blog/2020/wwdc20-scenekit-swiftui"/><title>Using SceneKit with SwiftUI to build interactions between them | Munir Xavier Wanis</title><meta name="twitter:title" content="Using SceneKit with SwiftUI to build interactions between them | Munir Xavier Wanis"/><meta name="og:title" content="Using SceneKit with SwiftUI to build interactions between them | Munir Xavier Wanis"/><meta name="description" content="Using SceneKit with SwiftUI to implement interesting interaction between both APIs."/><meta name="twitter:description" content="Using SceneKit with SwiftUI to implement interesting interaction between both APIs."/><meta name="og:description" content="Using SceneKit with SwiftUI to implement interesting interaction between both APIs."/><meta name="twitter:card" content="summary"/><link rel="stylesheet" href="/styles.css" type="text/css"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link rel="shortcut icon" href="/images/favicon.png" type="image/png"/><link rel="alternate" href="/feed.rss" type="application/rss+xml" title="Subscribe to Munir Xavier Wanis"/><meta name="twitter:image" content="https://munirwanis.github.io/image.png"/><meta name="og:image" content="https://munirwanis.github.io/image.png"/></head><body class="item-page"><header><div class="wrapper"><a href="/"><img class="img-header" src="/image.png" width="300"/></a><br/><a class="site-name" href="/">Munir Xavier Wanis</a></div></header><div class="wrapper"><article><div class="content"><h1>Using SceneKit with SwiftUI to build interactions between them</h1><p>WWDC20 is blowing our minds this week with a lot of great new things and I'm particularly stuned with this new feature in SwiftUI: <code>SpriteView</code>. Now you can embed SpriteKit views in SwiftUI in a very simple way, you take your <code>SKScene</code> and pass it as an argument on <code>SpriteView</code> just like that:</p><pre><code><span class="splashkeyword">import</span> SwiftUI
 <span class="splashkeyword">import</span> SpriteKit
 
 <span class="splashkeyword">class</span> GameScene: <span class="splashtype">SKScene</span> {
@@ -49,7 +49,7 @@
 }
 </code></pre><p>Now we will create a function that will take care of creating a button inside the <code>View</code>, we want to approach the arrow keys of old keyboards, just like that:</p><figure>
     <picture>
-        <img src="https://munirwanis.github.io/images/blog/2020/arrow-keys-example.png" alt="Arrow keys example">
+        <img src="/images/blog/2020/arrow-keys-example.png" alt="Arrow keys example">
     </picture>
     <figcaption>Good old arrow keys!</figcaption>
 </figure><p>Below the <code>body</code> property add this:</p><pre><code><span class="splashkeyword">func</span> directionalButton(<span class="splashkeyword">_</span> direction: <span class="splashtype">PlayerDirection</span>) -&gt; <span class="splashkeyword">some</span> <span class="splashtype">View</span> {
@@ -79,7 +79,7 @@
 }
 </code></pre><figure>
     <picture>
-        <img src="https://munirwanis.github.io/images/blog/2020/simulator-gray-linear-example.png" alt="Background with Linear Gradient">
+        <img src="/images/blog/2020/simulator-gray-linear-example.png" alt="Background with Linear Gradient">
     </picture>
     <figcaption>Using linear gradients</figcaption>
 </figure><p>Cool, we still have to add the <code>GameScene</code> and the arrow keys, so let's start with the scene first, put this below the <code>LinearGradient</code>:</p><pre><code><span class="splashtype">VStack</span> {
@@ -89,7 +89,7 @@
 }
 </code></pre><figure>
     <picture>
-        <img src="https://munirwanis.github.io/images/blog/2020/simulator-game-scene.png" alt="GameScene inside SwiftUI View">
+        <img src="/images/blog/2020/simulator-game-scene.png" alt="GameScene inside SwiftUI View">
     </picture>
     <figcaption>The result is the scene inside the SwiftUI View</figcaption>
 </figure><p>Now we just need to add the arrow keys to the View so we can finally tap on the buttons and see the player moving! Add this code below the <code>SpriteView</code>:</p><pre><code><span class="splashtype">VStack</span>(spacing: <span class="splashnumber">10</span>) {
@@ -108,23 +108,7 @@
 .<span class="splashcall">padding</span>(.<span class="splashdotAccess">all</span>, <span class="splashnumber">10</span>)
 </code></pre><p>And that's it! Here is the code in action:</p><figure>
     <picture>
-        <img src="https://munirwanis.github.io/images/blog/2020/spritekit-swiftui-action.gif" alt="Game in action">
+        <img src="/images/blog/2020/spritekit-swiftui-action.gif" alt="Game in action">
     </picture>
     <figcaption>Nice! Now we just need to add more things so the game can look interesting! 😅</figcaption>
-</figure><p>And that's it... This feature opens a lot of possibilities, imagine an adventure game that uses the inventory and action buttons as a <code>SwiftUI</code> view with all the cool animations and accessibility features way simpler to use.</p><p>The full code is available here: <a href="https://github.com/munirwanis/swiftui-spritekit">swiftui-spritekit</a>, including the game logic so you can see how the velocity is implemented inside the scene.</p>]]></content:encoded></item><item><guid isPermaLink="true">https://munirwanis.github.io/blog/2020/swiftui-statusbar-color</guid><title>SwiftUI status bar background color bug</title><description>SwiftUI and status bar background color</description><link>https://munirwanis.github.io/blog/2020/swiftui-statusbar-color</link><pubDate>Sat, 20 Jun 2020 11:30:00 -0300</pubDate><content:encoded><![CDATA[<h1>SwiftUI status bar background color bug</h1><p>Recently when I released <a href="https://apps.apple.com/br/app/live-tracker/id1514023371?l=en">Live Tracker</a> app people started to report a bug about the status bar being all white.</p><figure>
-    <picture>
-        <img src="https://munirwanis.github.io/images/blog/2020/statusbar-bug.jpeg" alt="Device bug example">
-    </picture>
-    <figcaption>Live Tracker status bar bug on iOS 13.2.3</figcaption>
-</figure><p>The expected behaviour should be a red background color like the <code>NavigationView</code>, on iOS 13.5 it looked just fine but on previous versions it was acting buggy like that. So, to get it working as expected I had to use a <code>ZStack</code> to put a <code>Color</code> view ignoring the top safe area, the code is simple and will look like this:</p><pre><code><span class="splashkeyword">struct</span> ContentView: <span class="splashtype">View</span> {
-    <span class="splashkeyword">var</span> body: <span class="splashkeyword">some</span> <span class="splashtype">View</span> {
-        <span class="splashtype">ZStack</span> {
-            <span class="splashtype">Color</span>.<span class="splashproperty">red</span>.<span class="splashcall">edgesIgnoringSafeArea</span>(.<span class="splashdotAccess">top</span>)
-
-            <span class="splashtype">NavigationView</span> {
-                <span class="splashtype">Text</span>(<span class="splashstring">"Hello World!"</span>)
-            }
-        }
-    }
-}
-</code></pre><p>That's it! Now it should be showing the desired color on your status bar. It looks kinda hacky and although Apple fixed it on newer versions it's still necessary to use it on older versions.</p>]]></content:encoded></item><item><guid isPermaLink="true">https://munirwanis.github.io/blog/2020/first-post</guid><title>Hello World!</title><description>Marking my first post</description><link>https://munirwanis.github.io/blog/2020/first-post</link><pubDate>Sat, 20 Jun 2020 09:30:00 -0300</pubDate><content:encoded><![CDATA[<h1>Hello World!</h1><p>I'm trying out <a href="https://github.com/JohnSundell/Publish">Publish</a> by John Sundell and thought it would be cool to have a static website to write about my adventures with coding things.</p><p>Maybe some of the solutions I find along the way will help others too. So why not sharing them? 😊</p>]]></content:encoded></item></channel></rss>
+</figure><p>And that's it... This feature opens a lot of possibilities, imagine an adventure game that uses the inventory and action buttons as a <code>SwiftUI</code> view with all the cool animations and accessibility features way simpler to use.</p><p>The full code is available here: <a href="https://github.com/munirwanis/swiftui-spritekit">swiftui-spritekit</a>, including the game logic so you can see how the velocity is implemented inside the scene.</p></div><span>Tagged with: </span><ul class="tag-list"><li><a href="/tags/swiftui">SwiftUI</a></li><li><a href="/tags/ios">iOS</a></li><li><a href="/tags/wwdc20">WWDC20</a></li></ul></article></div><footer><p><a href="https://twitter.com/munirwanis" target="_blank" rel="noopener noreferrer">Twitter</a></p><p>Generated using <a href="https://github.com/johnsundell/publish">Publish</a></p><p><a href="/feed.rss">RSS feed</a></p></footer></body></html>
