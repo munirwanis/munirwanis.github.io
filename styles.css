@@ -81,6 +81,27 @@ a {
     margin-bottom: 40px;
 }
 
+.about-list > li {
+    display: block;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #eee;
+    margin-bottom: 20px;
+}
+
+.about-list > li:last-child {
+    margin-bottom: 0;
+}
+
+.about-list h1 {
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.about-list p {
+    margin-bottom: 15px;
+}
+
 .item-list > li {
     display: block;
     padding: 20px;
@@ -181,8 +202,12 @@ footer {
     header .site-name {
         color: #ddd;
     }
-
+    
     .item-list > li {
+        background-color: #333;
+    }
+    
+    .about-list > li {
         background-color: #333;
     }
 
