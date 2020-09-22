@@ -1,4 +1,124 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content"><channel><title>Munir Xavier Wanis</title><description>Here you will find posts about the things I think are worth sharing.</description><link>https://munirwanis.github.io</link><language>en</language><lastBuildDate>Sat, 19 Sep 2020 08:20:17 -0300</lastBuildDate><pubDate>Sat, 19 Sep 2020 08:20:17 -0300</pubDate><ttl>250</ttl><atom:link href="https://munirwanis.github.io/feed.rss" rel="self" type="application/rss+xml"/><item><guid isPermaLink="true">https://munirwanis.github.io/blog/2020/wwdc20-scenekit-swiftui</guid><title>Build interactions using SceneKit and SwiftUI</title><description>Use SceneKit and SwiftUI to implement interesting interactions between both APIs</description><link>https://munirwanis.github.io/blog/2020/wwdc20-scenekit-swiftui</link><pubDate>Fri, 26 Jun 2020 01:00:00 -0300</pubDate><content:encoded><![CDATA[<h1>Build interactions using SceneKit and SwiftUI</h1><p>WWDC20 is blowing our minds this week with a lot of great new things and I'm particularly stuned with this new feature in SwiftUI: <code>SpriteView</code>. Now you can embed SpriteKit views in SwiftUI in a very simple way, you take your <code>SKScene</code> and pass it as an argument on <code>SpriteView</code> just like that:</p><pre><code><span class="splashkeyword">import</span> SwiftUI
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content"><channel><title>Munir Xavier Wanis</title><description>Here you will find posts about the things I think are worth sharing.</description><link>https://munirwanis.github.io</link><language>en</language><lastBuildDate>Tue, 22 Sep 2020 18:21:16 -0300</lastBuildDate><pubDate>Tue, 22 Sep 2020 18:21:16 -0300</pubDate><ttl>250</ttl><atom:link href="https://munirwanis.github.io/feed.rss" rel="self" type="application/rss+xml"/><item><guid isPermaLink="true">https://munirwanis.github.io/blog/2020/vaccine</guid><title>Introducing Vaccine, a dependency injection framework</title><description>Simple dependency injection library using Swift property wrappers.</description><link>https://munirwanis.github.io/blog/2020/vaccine</link><pubDate>Tue, 22 Sep 2020 16:00:00 -0300</pubDate><content:encoded><![CDATA[<h1>Introducing Vaccine, a dependency injection framework</h1><p>Since the introduction of property wrappers it became possible to do some great things with Swift, and the one I mostly like is dependency injections.</p><p>I made this little code for my personal projects so it could be easier to test the behaviours of my services and view models without needing to pass the dependencies as arguments on their initializers.</p><p>This <a href="https://github.com/munirwanis/vaccineexample">sample app</a> was made with the intention of showing how simple it can be to inject mocked implementations and make the most out of the unit tests.</p><h2>About the sample application</h2><p>The app makes a request to <a href="https://api.chucknorris.io">chucknorris.io</a> API and bring a random joke to the main screen.</p><p>If the user taps the refresh button, an loading animation occurs and another joke is loaded.</p><figure>
+    <picture>
+        <img src="https://munirwanis.github.io/images/blog/2020/random-joke-example.png" alt="Random Joke Example">
+    </picture>
+    <figcaption>The main screen of the app</figcaption>
+</figure><p>It is basically an <code>UIViewController</code> that makes calls to a <code>ViewModel</code> that also has a dependency to a <code>Service</code> that makes API calls.</p><p>So... If I wanted to make this testable ideally I should create a <code>Protocol</code> for my service and my view model, because then my view controller would use a reference to the view model protocol, and my view model a reference to my service protocol.</p><pre><code><span class="splashcomment">// Service protocol</span>
+<span class="splashkeyword">protocol</span> ChuckNorrisServicing {
+    <span class="splashkeyword">func</span> getRandomJoke(callback: <span class="splashkeyword">@escaping</span> (<span class="splashtype">Result</span>&lt;<span class="splashtype">ChuckNorrisResponse</span>, <span class="splashtype">Error</span>&gt;) -&gt; <span class="splashtype">Void</span>)
+}
+
+<span class="splashcomment">// ViewModel protocol</span>
+<span class="splashkeyword">protocol</span> JokeViewModeling {
+    <span class="splashkeyword">func</span> getRandomJoke(callback: <span class="splashkeyword">@escaping</span> (<span class="splashtype">Result</span>&lt;<span class="splashtype">JokeModel</span>, <span class="splashtype">Error</span>&gt;) -&gt; <span class="splashtype">Void</span>)
+}
+</code></pre><h2>Implementing without the framework</h2><p>Without the framework normally we would make initializers passing the default value and inside the tests we overwrite it by passing the mocked class.</p><pre><code><span class="splashkeyword">final class</span> JokeViewModel: <span class="splashtype">JokeViewModeling</span> {
+    <span class="splashkeyword">private let</span> service: <span class="splashtype">ChuckNorrisServicing</span>
+    
+    <span class="splashkeyword">init</span>(service: <span class="splashtype">ChuckNorrisServicing</span> = <span class="splashtype">ChuckNorrisService</span>()) {
+        <span class="splashkeyword">self</span>.<span class="splashproperty">service</span> = service
+    }
+
+    <span class="splashcomment">// ViewModel implementation...</span>
+}
+</code></pre><p>And with the <code>ViewController</code> we have a little problem, if I'm making a <code>UIViewController</code> with nibs or storyboards I can't call the initializer directly. For simplicity in this case I'm instantiating the ViewModel directly on the variable.</p><p>There are quite a few problems when doing that, the most common one is to forget that the variable exists when we're making tests and don't overwrite it! If someone else grab that code to make changes it's not so clear why it was implemented like that either.</p><pre><code><span class="splashkeyword">class</span> ViewController: <span class="splashtype">UIViewController</span> {
+    <span class="splashkeyword">var</span> viewModel: <span class="splashtype">JokeViewModeling</span> = <span class="splashtype">JokeViewModel</span>()
+
+    <span class="splashcomment">// ViewController implementation...</span>
+}
+</code></pre><h2>Using Vaccine</h2><p>The same result could be achieved by using Vaccine's property wrapper <code>@Inject</code>. Then the code for our ViewModel and ViewController would look like that:</p><pre><code><span class="splashkeyword">import</span> Vaccine
+
+<span class="splashkeyword">final class</span> JokeViewModel: <span class="splashtype">JokeViewModeling</span> {
+    <span class="splashkeyword">@Inject</span>(<span class="splashtype">ChuckNorrisServicing</span>.<span class="splashkeyword">self</span>) <span class="splashkeyword">private var</span> service
+
+    <span class="splashcomment">// ViewModel implementation...</span>
+}
+
+<span class="splashkeyword">class</span> ViewController: <span class="splashtype">UIViewController</span> {
+    <span class="splashkeyword">@Inject</span>(<span class="splashtype">JokeViewModeling</span>.<span class="splashkeyword">self</span>) <span class="splashkeyword">private var</span> viewModel
+ 
+    <span class="splashcomment">// ViewController implementation...</span>
+}
+</code></pre><p>Although we are declaring the properties as <code>var</code>'s and not <code>let</code>'s, they can't be overwritten after being initialized because inside the property wrapper they are constants. Property wrappers need to be declared as <code>var</code>'s since they are intended to wrap the current value and do some logic behind it.</p><p>One of the coolest things is that we can set those variables on <code>UIViewController</code>'s and don't bother to implement those nib/storyboards initializers! 😅</p><p>We should register our dependencies on the starting point of our application, the <code>AppDelegate</code>. If dependencies are not defined, the application will crash and inform you which classes you forgot to register.</p><pre><code><span class="splashkeyword">import</span> Vaccine
+
+<span class="splashkeyword">@main
+class</span> AppDelegate: <span class="splashtype">UIResponder</span>, <span class="splashtype">UIApplicationDelegate</span> {
+
+    <span class="splashkeyword">func</span> application(<span class="splashkeyword">_</span> application: <span class="splashtype">UIApplication</span>, didFinishLaunchingWithOptions launchOptions: [<span class="splashtype">UIApplication</span>.<span class="splashtype">LaunchOptionsKey</span>: <span class="splashtype">Any</span>]?) -&gt; <span class="splashtype">Bool</span> {
+        <span class="splashtype">Vaccine</span>.<span class="splashcall">setCure</span>(for: <span class="splashtype">ChuckNorrisServicing</span>.<span class="splashkeyword">self</span>, with: <span class="splashtype">ChuckNorrisService</span>())
+        <span class="splashtype">Vaccine</span>.<span class="splashcall">setCure</span>(for: <span class="splashtype">JokeViewModeling</span>.<span class="splashkeyword">self</span>, with: <span class="splashtype">JokeViewModel</span>())
+        
+        <span class="splashkeyword">return true</span>
+    }
+}
+</code></pre><h3>Testing</h3><p>Now that we are using <code>Vaccine</code> we can easily set our mock class to test the ViewModel behaviour.</p><pre><code><span class="splashcomment">// Service mock class</span>
+<span class="splashkeyword">class</span> ServiceMock: <span class="splashtype">ChuckNorrisServicing</span> {
+    <span class="splashkeyword">var</span> expectedJoke: <span class="splashtype">ChuckNorrisResponse</span>?
+    <span class="splashkeyword">var</span> expectedError: <span class="splashtype">Error</span>?
+    
+    <span class="splashkeyword">func</span> getRandomJoke(callback: <span class="splashkeyword">@escaping</span> (<span class="splashtype">Result</span>&lt;<span class="splashtype">ChuckNorrisResponse</span>, <span class="splashtype">Error</span>&gt;) -&gt; <span class="splashtype">Void</span>) {
+        <span class="splashkeyword">if let</span> joke = expectedJoke {
+            <span class="splashcall">callback</span>(.<span class="splashcall">success</span>(joke))
+        }
+        
+        <span class="splashkeyword">if let</span> error = expectedError {
+            <span class="splashcall">callback</span>(.<span class="splashcall">failure</span>(error))
+        }
+    }
+}
+</code></pre><p>Here is how the tests will work:</p><pre><code><span class="splashkeyword">import</span> XCTest
+<span class="splashkeyword">@testable import</span> VaccineExample
+<span class="splashkeyword">import</span> Vaccine
+
+<span class="splashkeyword">class</span> VaccineExampleTests: <span class="splashtype">XCTestCase</span> {
+
+    <span class="splashkeyword">private var</span> serviceMock: <span class="splashtype">ServiceMock</span>!
+    
+    <span class="splashkeyword">override func</span> setUpWithError() <span class="splashkeyword">throws</span> {
+        serviceMock = <span class="splashtype">ServiceMock</span>()
+        <span class="splashtype">Vaccine</span>.<span class="splashcall">setCure</span>(for: <span class="splashtype">ChuckNorrisServicing</span>.<span class="splashkeyword">self</span>, with: <span class="splashkeyword">self</span>.<span class="splashproperty">serviceMock</span>)
+    }
+
+    <span class="splashkeyword">override func</span> tearDownWithError() <span class="splashkeyword">throws</span> {
+        serviceMock = <span class="splashkeyword">nil</span>
+    }
+
+    <span class="splashkeyword">func</span> testViewModelSuccess() <span class="splashkeyword">throws</span> {
+        <span class="splashkeyword">let</span> response = <span class="splashtype">ChuckNorrisResponse</span>(iconUrl: <span class="splashstring">""</span>, id: <span class="splashstring">""</span>, url: <span class="splashstring">""</span>, value: <span class="splashstring">"My name is Chuck Norris"</span>)
+        serviceMock.<span class="splashproperty">expectedJoke</span> = response
+        <span class="splashkeyword">let</span> testExpectation = <span class="splashcall">expectation</span>(description: <span class="splashstring">"Request ends"</span>)
+        
+        <span class="splashtype">JokeViewModel</span>().<span class="splashcall">getRandomJoke</span> { result <span class="splashkeyword">in
+            defer</span> { testExpectation.<span class="splashcall">fulfill</span>() }
+            <span class="splashkeyword">switch</span> result {
+            <span class="splashkeyword">case</span> .<span class="splashdotAccess">success</span>(<span class="splashkeyword">let</span> model):
+                <span class="splashcall">XCTAssertTrue</span>(model.<span class="splashproperty">joke</span> == response.<span class="splashproperty">value</span>)
+            <span class="splashkeyword">case</span> .<span class="splashdotAccess">failure</span>(<span class="splashkeyword">let</span> error):
+                <span class="splashtype">XCTFail</span>(<span class="splashstring">"Test failed with error:</span> \(error.<span class="splashproperty">localizedDescription</span>)<span class="splashstring">"</span>)
+            }
+        }
+        
+        <span class="splashcall">wait</span>(for: [testExpectation], timeout: <span class="splashnumber">10.0</span>)
+    }
+    
+    <span class="splashkeyword">func</span> testViewModelError() <span class="splashkeyword">throws</span> {
+        serviceMock.<span class="splashproperty">expectedError</span> = <span class="splashtype">URLError</span>(.<span class="splashdotAccess">unknown</span>)
+        <span class="splashkeyword">let</span> testExpectation = <span class="splashcall">expectation</span>(description: <span class="splashstring">"Request ends"</span>)
+        
+        <span class="splashtype">JokeViewModel</span>().<span class="splashcall">getRandomJoke</span> { result <span class="splashkeyword">in
+            defer</span> { testExpectation.<span class="splashcall">fulfill</span>() }
+            <span class="splashkeyword">switch</span> result {
+            <span class="splashkeyword">case</span> .<span class="splashdotAccess">success</span>:
+                <span class="splashtype">XCTFail</span>(<span class="splashstring">"Test should fail"</span>)
+            <span class="splashkeyword">case</span> .<span class="splashdotAccess">failure</span>(<span class="splashkeyword">let</span> error):
+                <span class="splashcall">XCTAssertEqual</span>(error <span class="splashkeyword">as</span>! <span class="splashtype">URLError</span>, <span class="splashtype">URLError</span>(.<span class="splashdotAccess">unknown</span>))
+            }
+        }
+        
+        <span class="splashcall">wait</span>(for: [testExpectation], timeout: <span class="splashnumber">10.0</span>)
+    }
+}
+</code></pre><h2>Wrap up</h2><p>And that's it! With <code>Vaccine</code> you can also set your <a href="https://github.com/munirwanis/Vaccine#register-dependencies">dependencies as singletons</a> and/or do more complex stuff by calling <code>setCure</code> with closures!</p><p>Check out <a href="https://github.com/munirwanis/Vaccine">Vaccine</a>, pull requests are very welcome! 😃</p>]]></content:encoded></item><item><guid isPermaLink="true">https://munirwanis.github.io/blog/2020/wwdc20-scenekit-swiftui</guid><title>Build interactions using SceneKit and SwiftUI</title><description>Use SceneKit and SwiftUI to implement interesting interactions between both APIs</description><link>https://munirwanis.github.io/blog/2020/wwdc20-scenekit-swiftui</link><pubDate>Fri, 26 Jun 2020 01:00:00 -0300</pubDate><content:encoded><![CDATA[<h1>Build interactions using SceneKit and SwiftUI</h1><p>WWDC20 is blowing our minds this week with a lot of great new things and I'm particularly stuned with this new feature in SwiftUI: <code>SpriteView</code>. Now you can embed SpriteKit views in SwiftUI in a very simple way, you take your <code>SKScene</code> and pass it as an argument on <code>SpriteView</code> just like that:</p><pre><code><span class="splashkeyword">import</span> SwiftUI
 <span class="splashkeyword">import</span> SpriteKit
 
 <span class="splashkeyword">class</span> GameScene: <span class="splashtype">SKScene</span> {
